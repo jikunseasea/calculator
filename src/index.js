@@ -13,7 +13,7 @@ import reducer from './reducers'
 import './index.css';
 
 const middlewares = [];
-if (!process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV !== 'production') {
   middlewares.push(logger);
 }
 

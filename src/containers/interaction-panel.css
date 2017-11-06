@@ -1,0 +1,32 @@
+.interaction-panel {
+  height: 60%;
+  background-color: #888;
+}
+
+.panel-row {
+  height: 20%;
+  box-sizing: border-box;
+  border-bottom: 1px solid #555; 
+}
+.panel-row:last-child {
+  height: 40%;
+  border-bottom: none;
+}
+
+.span-row {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+.divi-row {
+  height: 50%;
+  padding: 0;
+  margin: 0;
+}
+
+.btn-clear {
+  color: blue;
+}
+.btn-equal {
+  background-color: skyblue;
+}
