@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import InputData from '../components/input-data';
 import ResultData from '../components/result-data';
@@ -8,14 +9,19 @@ import './view-panel.css';
 
 class ViewPanel extends React.Component {
   render() {
+    const { stack, result } = this.props;
     return (
-      <div className="row view-panel">
-        fajldsjfl
-        <InputData />
-        <ResultData />
+      <div className="view-panel">
+        <InputData stack={stack} />
+        <ResultData result={result} />
       </div>
     );
   }
 }
 
-export default ViewPanel;
+const mapStateToProps = (state) => {
+  const { stack, result } = state;
+  return { stack, result };
+}
+
+export default connect(mapStateToProps)(ViewPanel);

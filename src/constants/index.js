@@ -1,4 +1,6 @@
-export const PUSH_TEMP_STACK = 'PUSH_TEMP_STACK';
-export const COMPUTE_TEMP_RESULT = 'COMPUTE_TEMP_RESULT';
+export const PUSH_STACK = 'PUSH_STACK';
+// export const COMPUTE_TEMP_RESULT = 'COMPUTE_TEMP_RESULT';
 export const COMPUTE_RESULT = 'COMPUTE_RESULT';
-export const CLEAR_TEMP_STACK = 'CLEAR_TEMP_STACK';
+export const CLEAR_STACK = 'CLEAR_STACK';
+// export const UPDATE_CURRENT = 'UPDATE_CURRENT';
+export const DEL_STACK = 'DEL_STACK';

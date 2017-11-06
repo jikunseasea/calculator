@@ -1,23 +1,23 @@
 import { combineReducers } from 'redux';
-import { PUSH_TEMP_STACK, COMPUTE_TEMP_RESULT, COMPUTE_RESULT, CLEAR_TEMP_STACK } from '../constants';
+import {
+  PUSH_STACK, 
+  CLEAR_STACK, 
+  // UPDATE_CURRENT,
+  DEL_STACK,
+  COMPUTE_RESULT, 
+} from '../constants';
 
-const tempStack = (state=[], action) => {
+const stack = (state=[], action) => {
   switch (action.type) {
-    case PUSH_TEMP_STACK:
+    case PUSH_STACK:
       return [...state, action.value];
-    case CLEAR_TEMP_STACK:
+    case CLEAR_STACK:
       return [];
-    default:
-      return state;
-  }
-};
-
-
-const tempResult = (state=0, action) => {
-  switch (action.type) {
-    case COMPUTE_TEMP_RESULT:
-    case CLEAR_TEMP_STACK:
-      return 0;
+    case DEL_STACK:
+      if (state.length > 0) {
+        return state.slice(0, state.length - 1);
+      }
+      return [];
     default:
       return state;
   }
@@ -26,15 +26,13 @@ const tempResult = (state=0, action) => {
 const result = (state=0, action) => {
   switch (action.type) {
     case COMPUTE_RESULT:
-    case CLEAR_TEMP_STACK:
-     return 0;
+      /// Todo here...
     default:
       return state;
   }
 };
 
 export default combineReducers({
-  tempStack,
-  tempResult,
+  stack,
   result
 });

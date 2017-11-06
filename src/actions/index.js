@@ -1,6 +1,8 @@
-import { PUSH_TEMP_STACK, COMPUTE_RESULT, COMPUTE_TEMP_RESULT, CLEAR_TEMP_STACk } from '../constants';
+import { PUSH_STACK, COMPUTE_RESULT, CLEAR_STACK, UPDATE_CURRENT, DEL_STACK } from '../constants';
 
-export const pushTempStack = value => ({ type: PUSH_TEMP_STACK, value });
-export const computeTempResult = () => ({ type: COMPUTE_TEMP_RESULT });
+export const pushStack = value => ({ type: PUSH_STACK, value });
+// export const computeTempResult = () => ({ type: COMPUTE_TEMP_RESULT });
 export const computeResult = () => ({ type: COMPUTE_RESULT });
-export const clearTempStack = () => ({ type: CLEAR_TEMP_STACk });
+export const clearStack = () => ({ type: CLEAR_STACK });
+// export const updateCurrent = value => ({ type: UPDATE_CURRENT, value});
+export const delStack = () => ({ type: DEL_STACK });

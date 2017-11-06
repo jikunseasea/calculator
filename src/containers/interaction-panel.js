@@ -14,30 +14,86 @@ class InteractionPanel extends React.Component {
   }
 
   isNumber(item) {
-    return !!item.match(/[0-9]+/);
+    // return !!item.match(/[0-9]+/);
+    if (typeof item === 'number' && !isNaN(item)) return true;
+    if (item && item.match) return !!item.match(/[0-9]+/);
+    return false;
+  }
+
+  canInputDot(stack) {
+    const { length } = stack;
+    if (!length) return true;
+    const isPlus = v => v === '+';
+    const isMinus = v => v === '-';
+    const isMultiply = v => v === '*';
+    const isDivide = v => v === '/';
+    const isPercent = v => v === '%';
+    const isDot = v => v === '.';
+    for (let i = length - 1; i > -1; --i) {
+      const v = stack[i];
+      if (isPercent(v) || isDot(v)) {
+        return false;
+      } else if (isPlus(v) || isMinus(v) || isMultiply(v) || isDivide(v)) {
+        break;
+      }
+    }
+    return true;
   }
 
   handleClick(e) {
     const { name } = e.target;
-
-    let input = null;
+    const { stack, pushStack, computeResult, updateCurrent, clearStack, delStack } = this.props;
+    const { length } = stack;
 
     switch (name) {
       case 'AC':
+        clearStack();
+        break;
       case 'DEL':
+        delStack();
+        break;
       case '/':
       case '*':
       case '+':
       case '-':
+        if (this.isNumber(stack[length - 1])) {
+          pushStack(name);
+        } else if (stack[length - 1] !== '.' && stack[length - 1]) {
+          delStack(); // If the last of STACK is operator, override it.
+          pushStack(name);
+        }
+        break;
       case '.':
+        if (this.canInputDot(stack)) {
+          pushStack(name);
+        }
+        break;
       case '=':
+        computeResult();
+        break;
       case '%':
-      default:
-        input = parseInt(name);
+        // updateCurrent(name);
+        if (this.isNumber(stack[length - 1])) {
+          pushStack(name);
+          computeResult();
+        }
+        break;
+      default: // Number
+        const inputNum = parseInt(name);
+        if (stack[length - 1] !== '%') {
+          pushStack(inputNum);
+          computeResult();
+        }
+        // if (this.isNumber(stack[length - 1]) || (stack[length - 1] === '.')) {
+        //   // updateCurrent(inputNum);
+        //   pushStack(inputNum);
+        //   computeResult();
+        // } else if (this.isNumber() !== '%') {
+        //   pushStack(inputNum);
+        //   computeResult();
+        // }
     }
 
-    const { pushTempStack } = this.props;
-    pushTempStack(input);
   }
 
   render() {
@@ -75,7 +131,7 @@ class InteractionPanel extends React.Component {
             </div>
           </div>
           <div className="col-xs-3 span-row">
-            <button className="col-xs-12 span-row btn-equal">=</button>
+            <button className="col-xs-12 span-row btn-equal" onClick={this.handleClick} name="=">=</button>
           </div>
         </div>
       </div>
@@ -84,8 +140,8 @@ class InteractionPanel extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const { tempStack, tempResult, result } = state;
-  return { tempStack, tempResult, result };
+  const { stack } = state;
+  return { stack };
 };
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(actions, dispatch);
