@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+// import { bindActionCreators } from 'redux';
+import { isNumber, canInputDot, arrFromStack } from '../logic/util';
 
 import * as actions from '../actions';
 
@@ -13,36 +14,9 @@ class InteractionPanel extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  isNumber(item) {
-    // return !!item.match(/[0-9]+/);
-    if (typeof item === 'number' && !isNaN(item)) return true;
-    if (item && item.match) return !!item.match(/[0-9]+/);
-    return false;
-  }
-
-  canInputDot(stack) {
-    const { length } = stack;
-    if (!length) return true;
-    const isPlus = v => v === '+';
-    const isMinus = v => v === '-';
-    const isMultiply = v => v === '*';
-    const isDivide = v => v === '/';
-    const isPercent = v => v === '%';
-    const isDot = v => v === '.';
-    for (let i = length - 1; i > -1; --i) {
-      const v = stack[i];
-      if (isPercent(v) || isDot(v)) {
-        return false;
-      } else if (isPlus(v) || isMinus(v) || isMultiply(v) || isDivide(v)) {
-        break;
-      }
-    }
-    return true;
-  }
-
   handleClick(e) {
     const { name } = e.target;
-    const { stack, pushStack, computeResult, updateCurrent, clearStack, delStack } = this.props;
+    const { stack, pushStack, computeResult, clearStack, delStack } = this.props;
     const { length } = stack;
 
     switch (name) {
@@ -56,7 +30,7 @@ class InteractionPanel extends React.Component {
       case '*':
       case '+':
       case '-':
-        if (this.isNumber(stack[length - 1])) {
+        if (isNumber(stack[length - 1]) || stack[length - 1] === '%') {
           pushStack(name);
         } else if (stack[length - 1] !== '.' && stack[length - 1]) {
           delStack(); // If the last of STACK is operator, override it.
@@ -64,34 +38,24 @@ class InteractionPanel extends React.Component {
         }
         break;
       case '.':
-        if (this.canInputDot(stack)) {
+        if (canInputDot(stack)) {
           pushStack(name);
         }
         break;
       case '=':
-        computeResult();
+        computeResult(arrFromStack(stack));
         break;
       case '%':
-        // updateCurrent(name);
-        if (this.isNumber(stack[length - 1])) {
+        if (isNumber(stack[length - 1])) {
           pushStack(name);
-          computeResult();
+          computeResult(arrFromStack(stack));
         }
         break;
       default: // Number
-        const inputNum = parseInt(name);
         if (stack[length - 1] !== '%') {
-          pushStack(inputNum);
-          computeResult();
+          pushStack(name);
+          computeResult(arrFromStack(stack));
         }
-        // if (this.isNumber(stack[length - 1]) || (stack[length - 1] === '.')) {
-        //   // updateCurrent(inputNum);
-        //   pushStack(inputNum);
-        //   computeResult();
-        // } else if (this.isNumber() !== '%') {
-        //   pushStack(inputNum);
-        //   computeResult();
-        // }
     }
 
   }
@@ -143,9 +107,11 @@ const mapStateToProps = (state) => {
   const { stack } = state;
   return { stack };
 };
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(actions, dispatch);
-};
+// const mapDispatchToProps = (dispatch) => {
+//   console.log(actions);
+//   console.log(bindActionCreators(actions, dispatch));
+//   return bindActionCreators(actions, dispatch);
+// };
 
 export default connect(mapStateToProps, actions)(InteractionPanel);
-// export default InteractionPanel;
+// export default connect(mapStateToProps, mapDispatchToProps)(InteractionPanel);
