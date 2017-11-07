@@ -1,3 +1,5 @@
+import Big from 'big.js';
+
 export function isNumber(item) {
   // return !!item.match(/[0-9]+/);
   if (typeof item === 'number' && !isNaN(item)) return true;
@@ -39,6 +41,8 @@ export function arrFromStack(stack=[]) {
         case '+':
         case '/':
           return [...a, c];
+        case '%':
+          return [...a.slice(0, a.length - 1), `${a[a.length - 1] / 100}`];
         default:
           return [...a.slice(0, a.length - 1), `${a[a.length - 1]}${c}`];
       }
@@ -55,10 +59,47 @@ export function arrFromStack(stack=[]) {
       }
     }
   }, []);
-  console.log(arr);
+  // console.log(arr);
   return arr;
 }
 
-export function calculateFromArr(arr=[]) {
+// const calculateHelper = (arr, oper, callback) => {
+//   const index = arr.lastIndexOf(oper);
+//   if (index > -1) { 
+//     return callback(calculateFromArr(arr.slice(0, arr.length - 1), parseFloat(arr[index + 1])))
+//   }
+//   return null;
+// };
 
+function calculateBigFromArr(arr=[]) {
+  // let temp = null;
+  // temp = calculateHelper(arr, '+', (a, b) => a + b);
+  // if (!temp)
+  //   temp = calculateHelper(arr, '-', (a, b) => a - b);
+  // if (!temp)
+  //   temp = calculateHelper(arr, '*', (a, b) => a * b);
+  // if (!temp)
+  //   temp = calculateHelper(arr, '/', (a, b) => a / b);
+  // return temp === null ? temp : parseFloat(arr[0]);
+
+  let index = -1;
+  index = arr.lastIndexOf('+');
+  if (index > -1) {
+    return calculateBigFromArr(arr.slice(0, index)).plus(calculateBigFromArr(arr.slice(index + 1)));
+  }
+  index = arr.lastIndexOf('-');
+  if (index > -1) {
+    return calculateBigFromArr(arr.slice(0, index)).minus(calculateBigFromArr(arr.slice(index + 1)));
+  }
+  index = arr.lastIndexOf('*');
+  if (index > -1) {
+    return calculateBigFromArr(arr.slice(0, index)).times(calculateBigFromArr(arr.slice(index + 1)));
+  }
+  index = arr.lastIndexOf('/');
+  if (index > -1) {
+    return calculateBigFromArr(arr.slice(0, index)).div(calculateBigFromArr(arr.slice(index + 1)));
+  }
+  return new Big(parseFloat(arr[0]));
 }
+
+export const calculateFromArr = (arr=[]) => calculateBigFromArr(arr).toFixed();

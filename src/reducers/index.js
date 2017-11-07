@@ -27,7 +27,7 @@ const stack = (state=[], action) => {
 const result = (state=0, action) => {
   switch (action.type) {
     case COMPUTE_RESULT:
-      return calulateFromArr(action.arr);
+      return calculateFromArr(action.arr);
     default:
       return state;
   }
