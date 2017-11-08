@@ -1,9 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-// import { bindActionCreators } from 'redux';
-import { isNumber, canInputDot, arrFromStack } from '../logic/util';
-
-import * as actions from '../actions';
+import { isNumber, canInputDot } from '../logic/util';
 
 import './interaction-panel.css';
 
@@ -17,6 +13,7 @@ class InteractionPanel extends React.Component {
   handleClick(e) {
     const { name } = e.target;
     const { stack, pushStack, computeResult, clearStack, delStack } = this.props;
+    console.log(this.props);
     const { length } = stack;
 
     switch (name) {
@@ -44,21 +41,20 @@ class InteractionPanel extends React.Component {
         }
         break;
       case '=':
-        // computeResult(arrFromStack(stack));
         computeResult(stack);
         break;
       case '%':
         if (isNumber(stack[length - 1])) {
           pushStack(name);
-          // computeResult(arrFromStack([...stack, name]));
           computeResult([...stack, name]);
+          // computeResult(stack);
         }
         break;
       default: // Number
         if (stack[length - 1] !== '%') {
           pushStack(name);
-          // computeResult(arrFromStack([...stack, name]));
           computeResult([...stack, name]);
+          // computeResult(stack);
         }
     }
 
@@ -107,15 +103,4 @@ class InteractionPanel extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  const { stack } = state;
-  return { stack };
-};
-// const mapDispatchToProps = (dispatch) => {
-//   console.log(actions);
-//   console.log(bindActionCreators(actions, dispatch));
-//   return bindActionCreators(actions, dispatch);
-// };
-
-export default connect(mapStateToProps, actions)(InteractionPanel);
-// export default connect(mapStateToProps, mapDispatchToProps)(InteractionPanel);
+export default InteractionPanel;

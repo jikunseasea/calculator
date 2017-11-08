@@ -66,7 +66,7 @@ export function arrFromStack(stack=[]) {
 const calculateHelper = (arr, oper, callback) => {
   const index = arr.lastIndexOf(oper);
   if (index > -1) { 
-    return callback(calculateFromArr(arr.slice(0, index)), calculateFromArr(arr.slice(index + 1)));
+    return callback(calculateBigFromArr(arr.slice(0, index)), calculateBigFromArr(arr.slice(index + 1)));
   }
   return null;
 };
