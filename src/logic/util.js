@@ -63,58 +63,53 @@ export function arrFromStack(stack=[]) {
   return arr;
 }
 
-// const calculateHelper = (arr, oper, callback) => {
-//   const index = arr.lastIndexOf(oper);
-//   if (index > -1) { 
-//     return callback(calculateFromArr(arr.slice(0, arr.length - 1), parseFloat(arr[index + 1])))
-//   }
-//   return null;
-// };
+const calculateHelper = (arr, oper, callback) => {
+  const index = arr.lastIndexOf(oper);
+  if (index > -1) { 
+    return callback(calculateFromArr(arr.slice(0, index)), calculateFromArr(arr.slice(index + 1)));
+  }
+  return null;
+};
 
 function calculateBigFromArr(arr=[]) {
-  // let temp = null;
-  // temp = calculateHelper(arr, '+', (a, b) => a + b);
-  // if (!temp)
-  //   temp = calculateHelper(arr, '-', (a, b) => a - b);
-  // if (!temp)
-  //   temp = calculateHelper(arr, '*', (a, b) => a * b);
-  // if (!temp)
-  //   temp = calculateHelper(arr, '/', (a, b) => a / b);
-  // return temp === null ? temp : parseFloat(arr[0]);
 
   if (arr.length === 0) return 0;
 
-  // try {
-    let index = -1;
-    index = arr.lastIndexOf('+');
-    if (index > -1) {
-      return calculateBigFromArr(arr.slice(0, index)).plus(calculateBigFromArr(arr.slice(index + 1)));
-    }
-    index = arr.lastIndexOf('-');
-    if (index > -1) {
-      return calculateBigFromArr(arr.slice(0, index)).minus(calculateBigFromArr(arr.slice(index + 1)));
-    }
-    index = arr.lastIndexOf('*');
-    if (index > -1) {
-      return calculateBigFromArr(arr.slice(0, index)).times(calculateBigFromArr(arr.slice(index + 1)));
-    }
-    index = arr.lastIndexOf('/');
-    if (index > -1) {
-      return calculateBigFromArr(arr.slice(0, index)).div(calculateBigFromArr(arr.slice(index + 1)));
-    }
-    return new Big(parseFloat(arr[0]));
-  // } catch (err) {
-  //   return 'Cannot divide by zero';
+  let temp = null;
+  temp = calculateHelper(arr, '+', (a, b) => a.plus(b));
+  if (!temp)
+    temp = calculateHelper(arr, '-', (a, b) => a.minus(b));
+  if (!temp)
+    temp = calculateHelper(arr, '*', (a, b) => a.times(b));
+  if (!temp)
+    temp = calculateHelper(arr, '/', (a, b) => a.div(b));
+  return temp === null ? new Big(parseFloat(arr[0])) : temp;
+
+  // let index = -1;
+  // index = arr.lastIndexOf('+');
+  // if (index > -1) {
+  //   return calculateBigFromArr(arr.slice(0, index)).plus(calculateBigFromArr(arr.slice(index + 1)));
   // }
+  // index = arr.lastIndexOf('-');
+  // if (index > -1) {
+  //   return calculateBigFromArr(arr.slice(0, index)).minus(calculateBigFromArr(arr.slice(index + 1)));
+  // }
+  // index = arr.lastIndexOf('*');
+  // if (index > -1) {
+  //   return calculateBigFromArr(arr.slice(0, index)).times(calculateBigFromArr(arr.slice(index + 1)));
+  // }
+  // index = arr.lastIndexOf('/');
+  // if (index > -1) {
+  //   return calculateBigFromArr(arr.slice(0, index)).div(calculateBigFromArr(arr.slice(index + 1)));
+  // }
+  // return new Big(parseFloat(arr[0]));
+
 }
 
 function isValidComputation(arr) {
-  // if (arr.length === 0) {
-  //   return true;
-  // }
   for (let i = 0, len = arr.length; i < len; ++i) {
     if (arr[i] === '/' && (arr[i + 1] === '0')) {
-      console.log('Invalid index: ' + i);
+      // console.log('Invalid index: ' + i);
       return false;
     }
   }
@@ -123,8 +118,8 @@ function isValidComputation(arr) {
 
 export const calculateFromStack = (stack=[]) => {
   const arr = arrFromStack(stack);
-  console.log('Arr is: ' + arr);
-  console.log(isValidComputation(arr));
+  // console.log('Arr is: ' + arr);
+  // console.log(isValidComputation(arr));
   if (isValidComputation(arr)) {
     return calculateBigFromArr(arr).toFixed()
   }
