@@ -82,24 +82,51 @@ function calculateBigFromArr(arr=[]) {
   //   temp = calculateHelper(arr, '/', (a, b) => a / b);
   // return temp === null ? temp : parseFloat(arr[0]);
 
-  let index = -1;
-  index = arr.lastIndexOf('+');
-  if (index > -1) {
-    return calculateBigFromArr(arr.slice(0, index)).plus(calculateBigFromArr(arr.slice(index + 1)));
-  }
-  index = arr.lastIndexOf('-');
-  if (index > -1) {
-    return calculateBigFromArr(arr.slice(0, index)).minus(calculateBigFromArr(arr.slice(index + 1)));
-  }
-  index = arr.lastIndexOf('*');
-  if (index > -1) {
-    return calculateBigFromArr(arr.slice(0, index)).times(calculateBigFromArr(arr.slice(index + 1)));
-  }
-  index = arr.lastIndexOf('/');
-  if (index > -1) {
-    return calculateBigFromArr(arr.slice(0, index)).div(calculateBigFromArr(arr.slice(index + 1)));
-  }
-  return new Big(parseFloat(arr[0]));
+  if (arr.length === 0) return 0;
+
+  // try {
+    let index = -1;
+    index = arr.lastIndexOf('+');
+    if (index > -1) {
+      return calculateBigFromArr(arr.slice(0, index)).plus(calculateBigFromArr(arr.slice(index + 1)));
+    }
+    index = arr.lastIndexOf('-');
+    if (index > -1) {
+      return calculateBigFromArr(arr.slice(0, index)).minus(calculateBigFromArr(arr.slice(index + 1)));
+    }
+    index = arr.lastIndexOf('*');
+    if (index > -1) {
+      return calculateBigFromArr(arr.slice(0, index)).times(calculateBigFromArr(arr.slice(index + 1)));
+    }
+    index = arr.lastIndexOf('/');
+    if (index > -1) {
+      return calculateBigFromArr(arr.slice(0, index)).div(calculateBigFromArr(arr.slice(index + 1)));
+    }
+    return new Big(parseFloat(arr[0]));
+  // } catch (err) {
+  //   return 'Cannot divide by zero';
+  // }
 }
 
-export const calculateFromArr = (arr=[]) => calculateBigFromArr(arr).toFixed();
+function isValidComputation(arr) {
+  // if (arr.length === 0) {
+  //   return true;
+  // }
+  for (let i = 0, len = arr.length; i < len; ++i) {
+    if (arr[i] === '/' && (arr[i + 1] === '0')) {
+      console.log('Invalid index: ' + i);
+      return false;
+    }
+  }
+  return true;
+}
+
+export const calculateFromStack = (stack=[]) => {
+  const arr = arrFromStack(stack);
+  console.log('Arr is: ' + arr);
+  console.log(isValidComputation(arr));
+  if (isValidComputation(arr)) {
+    return calculateBigFromArr(arr).toFixed()
+  }
+  return 'Can not divide';
+};

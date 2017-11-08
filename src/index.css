@@ -1,7 +1,9 @@
 html {
   height: 100%;
+  font-size: 62.5%;
 }
 body {
+  font-size: 3rem;
   height: 100%;
   background-color: #ddd;
 }

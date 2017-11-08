@@ -6,7 +6,8 @@ import {
   DEL_STACK,
   COMPUTE_RESULT, 
 } from '../constants';
-import { calculateFromArr } from '../logic/util';
+// import { calculateFromArr } from '../logic/util';
+import { calculateFromStack } from '../logic/util';
 
 const stack = (state=[], action) => {
   switch (action.type) {
@@ -27,7 +28,7 @@ const stack = (state=[], action) => {
 const result = (state=0, action) => {
   switch (action.type) {
     case COMPUTE_RESULT:
-      return calculateFromArr(action.arr);
+      return calculateFromStack(action.arr);
     default:
       return state;
   }

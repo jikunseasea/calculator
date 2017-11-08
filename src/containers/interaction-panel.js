@@ -22,6 +22,7 @@ class InteractionPanel extends React.Component {
     switch (name) {
       case 'AC':
         clearStack();
+        computeResult();
         break;
       case 'DEL':
         delStack();
@@ -43,18 +44,21 @@ class InteractionPanel extends React.Component {
         }
         break;
       case '=':
-        computeResult(arrFromStack(stack));
+        // computeResult(arrFromStack(stack));
+        computeResult(stack);
         break;
       case '%':
         if (isNumber(stack[length - 1])) {
           pushStack(name);
-          computeResult(arrFromStack(stack));
+          // computeResult(arrFromStack([...stack, name]));
+          computeResult([...stack, name]);
         }
         break;
       default: // Number
         if (stack[length - 1] !== '%') {
           pushStack(name);
-          computeResult(arrFromStack(stack));
+          // computeResult(arrFromStack([...stack, name]));
+          computeResult([...stack, name]);
         }
     }
 
