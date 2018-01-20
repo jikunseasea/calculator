@@ -4,7 +4,6 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { logger } from 'redux-logger';
 
-import 'github-fork-ribbon-css/gh-fork-ribbon.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import App from './containers/app';
