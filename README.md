@@ -18,7 +18,6 @@ Usage
 `npm start`
 
 ## TODO
----
 
 - 键盘事件绑定
 
