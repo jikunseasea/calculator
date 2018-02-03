@@ -3,19 +3,8 @@ Calculator
 
 Created with *create-react-app*.
 
+Mobile device is supported.
 
-
-Install
----
-
-`npm install`
-
-
-
-Usage
----
-
-`npm start`
 
 ## TODO
 
